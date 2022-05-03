@@ -88,13 +88,14 @@ class Iteration1Helper:
         self.PROCESS_GUESS_WAITTIME = 1  # When processing a guess (changing color
                                        # of the guess frames), time to wait between
                                        # updating successive frames.
-       
+
         self.Iteration_1()
         # Start event loop
         self.window.mainloop()
       
     def Iteration_1(self):
-        # Create window
+       """ Implements all steps of Iteration 1"""
+       # Create window
        self.window = tk.Tk()
        self.window.title("Wordy")
  
@@ -111,19 +112,22 @@ class Iteration1Helper:
            height = self.CONTROL_FRAME_HEIGHT, width = self.CONTROL_FRAME_WIDTH)
        self.control_frame.grid(row = 0, column = 1,rowspan=2)
        self.control_frame.grid_propagate(False)
- 
+
+       # Create parameter frame inside control frame
        self.parameter_frame = tk.Frame(self.control_frame,
            borderwidth = 1, relief = 'solid',
            height = self.CONTROL_FRAME_HEIGHT/3, width = self.CONTROL_FRAME_WIDTH)
        self.parameter_frame.grid(row = 1, column = 0)
        self.parameter_frame.grid_propagate(False)
- 
+
+       # Create message frame inside control frame
        self.message_frame = tk.Frame(self.control_frame,
            borderwidth = 1, relief = 'solid',
            height = self.CONTROL_FRAME_HEIGHT/3, width = self.CONTROL_FRAME_WIDTH)
        self.message_frame.grid(row = 0, column = 0)
        self.message_frame.grid_propagate(False)
- 
+
+       # Create button frame inside control frame
        self.button_frame = tk.Frame(self.control_frame,
            borderwidth = 1, relief = 'solid',
            height = self.CONTROL_FRAME_HEIGHT/3, width = self.CONTROL_FRAME_WIDTH)

@@ -13,11 +13,13 @@ import time
 from enum import Enum
 from tkinter.tix import Tree
 
+
 class Iteration2Helper:
     def __init__(self):
         """
         Initialize the window with frames and widgets.
         """
+        self.hidden_word = ""
         self.WORD_SIZE = 5  # number of letters in the hidden word
         self.NUM_GUESSES = 6 # number of guesses that the user gets
         self.LONG_WORDLIST_FILENAME = "long_wordlist.txt"
@@ -97,11 +99,12 @@ class Iteration2Helper:
 
         self.Iteration_1()
         self.Iteration_2()
-        
+
         self.window.mainloop()
 
     def Iteration_1(self):
-            # Create window
+        """ Implements all steps of Iteration 1"""
+        # Create window
         self.window = tk.Tk()
         self.window.title("Wordy")
     
@@ -118,25 +121,27 @@ class Iteration2Helper:
             height = self.CONTROL_FRAME_HEIGHT, width = self.CONTROL_FRAME_WIDTH)
         self.control_frame.grid(row = 0, column = 1,rowspan=2)
         self.control_frame.grid_propagate(False)
-    
+
+        # Create parameter frame inside control frame
         self.parameter_frame = tk.Frame(self.control_frame,
             borderwidth = 1, relief = 'solid',
             height = self.CONTROL_FRAME_HEIGHT/3, width = self.CONTROL_FRAME_WIDTH)
         self.parameter_frame.grid(row = 1, column = 0)
         self.parameter_frame.grid_propagate(False)
     
+        # Create message frame inside control frame
         self.message_frame = tk.Frame(self.control_frame,
             borderwidth = 1, relief = 'solid',
             height = self.CONTROL_FRAME_HEIGHT/3, width = self.CONTROL_FRAME_WIDTH)
         self.message_frame.grid(row = 0, column = 0)
         self.message_frame.grid_propagate(False)
-    
+
+        # Create button frame inside control frame
         self.button_frame = tk.Frame(self.control_frame,
             borderwidth = 1, relief = 'solid',
             height = self.CONTROL_FRAME_HEIGHT/3, width = self.CONTROL_FRAME_WIDTH)
         self.button_frame.grid(row = 2, column = 0)
         self.button_frame.grid_propagate(False)
-    
     
         # Put a frame below the top two.
         self.keyboard_frame = tk.Frame(self.window,
@@ -146,6 +151,7 @@ class Iteration2Helper:
         self.keyboard_frame.grid_propagate(False)
        
     def Iteration_2(self):
+        """ Implements all steps of iteration 2 """
         # Constants
         self.PADDING = 10 # Padding around widgets
         self.ENTRY_SIZE = 10 # Size of entry widget
@@ -153,6 +159,7 @@ class Iteration2Helper:
         #Add words to short list and long list
         self.list_pop()
 
+        # Create blanks rows so widgets will be centered in each frame
         self.parameter_frame.rowconfigure(0,weight=2)
         self.parameter_frame.rowconfigure(5,weight=2)
         
@@ -165,6 +172,7 @@ class Iteration2Helper:
         self.button_frame.columnconfigure(3,weight=2)
         self.button_frame.rowconfigure(0,weight=2)
         self.button_frame.rowconfigure(2,weight=2)
+
         # Create hard mode check button
         self.hard_mode_checkbox_var = tk.BooleanVar()
         self.hard_mode_checkbox_var.set(False)
@@ -180,7 +188,7 @@ class Iteration2Helper:
         # Create show word check button
         self.show_word_checkbox_var = tk.BooleanVar()
         self.show_word_checkbox_var.set(False)
-        self.show_word_checkbutton = tk.Checkbutton(self.parameter_frame, text = "Show word", var = self.show_word_checkbox_var)
+        self.show_word_checkbutton = tk.Checkbutton(self.parameter_frame, text = "Show word", var = self.show_word_checkbox_var, command = self.show_word_check)
         self.show_word_checkbutton.grid(row = 3, column = 0, padx = self.PADDING, sticky = "W")
 
         # Create specify word check button
@@ -194,28 +202,35 @@ class Iteration2Helper:
         self.specify_word_entry = tk.Entry(self.parameter_frame, width = self.ENTRY_SIZE, textvariable = self.specify_word_entry_var)
         self.specify_word_entry.grid(row = 4, column = 1)
 
-        self.hidden_word=tk.StringVar()
-        self.show_word_text=tk.Label(self.parameter_frame,textvariable=self.hidden_word)
+        # Create label for hidden word
+        self.hidden_word_var=tk.StringVar()
+        self.show_word_text=tk.Label(self.parameter_frame,textvariable=self.hidden_word_var)
         self.show_word_text.grid(row=3,column=1)
         
+        # Create label to display messages
         self.message_var=tk.StringVar()
         self.message=tk.Label(self.message_frame,textvariable=self.message_var)
         self.message.grid(row=1,column=1)
 
-        self.start_button=tk.Button(self.button_frame,text="Start Game")
+        # Create start and quit buttons
+        self.start_button=tk.Button(self.button_frame,text="Start Game", command = self.start_button_handler)
         self.start_button.grid(row=1,column=1)
-        self.quit_button=tk.Button(self.button_frame,text="Quit")
+        self.quit_button=tk.Button(self.button_frame,text="Quit", command = self.quit)
         self.quit_button.grid(row=1,column=2)
 
     def list_pop(self):
+        """ Populates the long_list and short_list from their respective text files """
+
         self.long_list=[]
         self.short_list=[]
         f=open("long_wordlist.txt")
+        # Populates long list
         for lines in f:
             line=lines.strip()
             if len(line)==self.WORD_SIZE:
                 self.long_list.append(line)
         f.close()
+        # Populates short list
         f=open("short_wordlist.txt")
         for lines in f:
             line=lines.strip()
@@ -223,18 +238,72 @@ class Iteration2Helper:
                 self.short_list.append(line)
         f.close()
 
-    def button_handler(self):
-        """
-        Disables the checkbox and entry field.
+    def message_display(self,message):
+        """ Displays message in the message frame and clears it after amount of time """
+        self.message_var.set(message)
+        self.window.after(self.MESSAGE_DISPLAY_TIME_SECS*1000, self.message_clear)
 
-        Prints out the state of the checkbox,
-        and the contents of the entry field.
-        """
-        self.checkbox['state'] = 'disabled'
-        self.entry['state'] = 'disabled'
-        print(f"Button status = {self.checkbox_var.get()}")
-        print(f"Entry = {self.entry_var.get()}")
+    def message_clear(self):
+        """ Clears the message label """
+        self.message_var.set("")
+    
+    def start_button_handler(self):
+        """ Checks to make sure the game can start when the button is clicked, also initializes
+        all parameter variables and starts the game if valid """
+
+        #Checks to see if user wants to specify word
+        if self.specify_word_checkbox_var.get() == True:
+            # Makes sure word if right length
+            if len(self.specify_word_entry_var.get()) != self.WORD_SIZE:
+                self.message_display("Incorrect specified word length")
+                return
+            # Checks to see if the guess must be word box is checked
+            # If so, makes sure entry is valid
+            elif self.guesses_must_be_words_checkbox_var.get() == True:
+                if self.specify_word_entry_var.get() not in self.long_list:
+                    self.message_display("specified word not a valid word")
+                    return
+            else:
+                # Initialize parameter variables and disable checkboxes/entries
+                self.hard_mode_parameter = self.hard_mode_checkbox_var.get()
+                self.hard_mode_checkbutton['state'] = 'disabled'
+                self.guesses_must_be_words_parameter = self.guesses_must_be_words_checkbox_var.get()
+                self.guesses_must_be_words_checkbutton['state'] = 'disabled'
+                self.show_word_parameter = self.show_word_checkbox_var.get()
+                self.hidden_word = self.specify_word_entry_var.get()
+                self.specify_word_checkbutton['state'] = 'disabled'
+                self.specify_word_entry_var.set("")
+        else:
+            # Initialize parameter variables and disable checkboxes/entries
+            self.hard_mode_parameter = self.hard_mode_checkbox_var.get()
+            self.hard_mode_checkbutton['state'] = 'disabled'
+            self.guesses_must_be_words_parameter = self.guesses_must_be_words_checkbox_var.get()
+            self.guesses_must_be_words_checkbutton['state'] = 'disabled'
+            self.show_word_parameter = self.show_word_checkbox_var.get()
+            self.specify_word_checkbutton['state'] = 'disabled'
+            # Takes random word from long_list
+            self.hidden_word = self.long_list[random.randint(0, len(self.short_list))]
+
+        if self.show_word_parameter == True:
+            #display word if box is checked
+            self.hidden_word_var.set(self.hidden_word)
         
+        #Prints all conditions/parameters
+        print("Hard Mode = " + str(self.hard_mode_parameter))
+        print("Guesses must be word = " + str(self.guesses_must_be_words_parameter))
+        print("Show word = " + str(self.show_word_checkbox_var.get()))
+        print("Specify word = " + str(self.specify_word_checkbox_var.get()))
+        print("Hidden word = " + self.hidden_word)
 
+    def quit(self):
+        """ Quits the window """
+        self.window.destroy()
+
+    def show_word_check(self):
+        """ Checks to see if the user wants to show word """
+        if self.show_word_checkbox_var.get() == True:
+            self.hidden_word_var.set(self.hidden_word)
+        else:
+            self.hidden_word_var.set("")
 if __name__ == "__main__":
    Iteration2Helper()
