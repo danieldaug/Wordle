@@ -149,7 +149,22 @@ class Iteration2Helper:
         # Constants
         self.PADDING = 10 # Padding around widgets
         self.ENTRY_SIZE = 10 # Size of entry widget
+
+        #Add words to short list and long list
+        self.list_pop()
+
+        self.parameter_frame.rowconfigure(0,weight=2)
+        self.parameter_frame.rowconfigure(5,weight=2)
         
+        self.message_frame.rowconfigure(0,weight=2)
+        self.message_frame.rowconfigure(5,weight=2)
+        self.message_frame.columnconfigure(0,weight=2)
+        self.message_frame.columnconfigure(2,weight=2)
+        
+        self.button_frame.columnconfigure(0,weight=2)
+        self.button_frame.columnconfigure(3,weight=2)
+        self.button_frame.rowconfigure(0,weight=2)
+        self.button_frame.rowconfigure(2,weight=2)
         # Create hard mode check button
         self.hard_mode_checkbox_var = tk.BooleanVar()
         self.hard_mode_checkbox_var.set(False)
@@ -179,7 +194,34 @@ class Iteration2Helper:
         self.specify_word_entry = tk.Entry(self.parameter_frame, width = self.ENTRY_SIZE, textvariable = self.specify_word_entry_var)
         self.specify_word_entry.grid(row = 4, column = 1)
 
+        self.hidden_word=tk.StringVar()
+        self.show_word_text=tk.Label(self.parameter_frame,textvariable=self.hidden_word)
+        self.show_word_text.grid(row=3,column=1)
         
+        self.message_var=tk.StringVar()
+        self.message=tk.Label(self.message_frame,textvariable=self.message_var)
+        self.message.grid(row=1,column=1)
+
+        self.start_button=tk.Button(self.button_frame,text="Start Game")
+        self.start_button.grid(row=1,column=1)
+        self.quit_button=tk.Button(self.button_frame,text="Quit")
+        self.quit_button.grid(row=1,column=2)
+
+    def list_pop(self):
+        self.long_list=[]
+        self.short_list=[]
+        f=open("long_wordlist.txt")
+        for lines in f:
+            line=lines.strip()
+            if len(line)==self.WORD_SIZE:
+                self.long_list.append(line)
+        f.close()
+        f=open("short_wordlist.txt")
+        for lines in f:
+            line=lines.strip()
+            if len(line)==self.WORD_SIZE:
+                self.short_list.append(line)
+        f.close()
 
     def button_handler(self):
         """
