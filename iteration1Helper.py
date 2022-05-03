@@ -14,7 +14,7 @@ from enum import Enum
  
 class Iteration1Helper:
    def __init__(self):
- 
+       """Initialize variables and window"""
        self.WORD_SIZE = 5  # number of letters in the hidden word
        self.NUM_GUESSES = 6 # number of guesses that the user gets
        self.LONG_WORDLIST_FILENAME = "long_wordlist.txt"
@@ -131,12 +131,6 @@ class Iteration1Helper:
            height = self.KEYBOARD_FRAME_HEIGHT, width = self.PARENT_GUESS_FRAME_WIDTH)
        self.keyboard_frame.grid(row = 1, column = 0)
        self.keyboard_frame.grid_propagate(False)
- 
-       # self.frame4 = tk.Frame(self.window,
-       #     borderwidth = 1, relief = 'solid',
-       #     height = 400, width = 300)
-       # self.frame4.grid(row = 2, column = 2, columnspan = 2)
-       # self.frame4.grid_propagate(False)
  
        # Start event loop
        self.window.mainloop()
