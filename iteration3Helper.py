@@ -305,6 +305,12 @@ class Iteration3Helper:
         self.button_width = 5
         self.button_text_color = 'blue'
         for r in range(len(self.button_text)):
+            frame=tk.Frame(self.keyboard_frame,width=self.PARENT_GUESS_FRAME_WIDTH,height=self.KEYBOARD_FRAME_HEIGHT/3)
+            frame.grid(row=r+1,column=1)
+            frame.rowconfigure(0, weight = 1)
+            frame.rowconfigure(len(self.button_text) + 1, weight = 1)
+            frame.columnconfigure(0, weight = 1)
+            frame.columnconfigure(len(self.button_text[0]) + 1, weight = 1)
             for c in range(len(self.button_text[r])):
 
                 # Define a handler for this button.
@@ -316,8 +322,8 @@ class Iteration3Helper:
                 # that specifies which button was pressed.
                 def handler(key = self.button_text[r][c]):
                     self.button_handler(key)
-                button = tk.Button(self.keyboard_frame,
-                        width = self.KEYBOARD_BUTTON_WIDTH,height=self.KEYBOARD_BUTTON_HEIGHT,
+                button = tk.Button(frame,
+                        width = self.KEYBOARD_BUTTON_WIDTH,#height=self.KEYBOARD_BUTTON_HEIGHT,
                         text = self.button_text[r][c],
                         fg=self.button_text_color, 
                         font=self.FONT,
