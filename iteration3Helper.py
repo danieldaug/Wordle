@@ -106,11 +106,7 @@ class Iteration3Helper:
         # Start event loop
         self.window.mainloop()
 
-    def button_handler(self,text):
-        """
-        Changes the color of the button that was pressed
-        """
-        self.buttons[text]['fg'] = 'red'
+    
     def helper(self):
         
         self.window = tk.Tk()
@@ -319,9 +315,14 @@ class Iteration3Helper:
                 # But each handler calls the same method
                 # (button_handler), but with a parameter
                 # that specifies which button was pressed.
-                def handler(key = self.button_text[r][c]):
-                    self.button_handler(key)
+                
                 if self.button_text[r][c]=="ENTER" or self.button_text[r][c]=="BACK":
+                    if self.button_text[r][c]=="ENTER":
+                        def handler(key = self.button_text[r][c]):
+                            self.enter_handler(key)
+                    else:
+                        def handler(key = self.button_text[r][c]):
+                            self.back_handler(key)
                     button = tk.Button(frame,
                         width = self.KEYBOARD_BUTTON_WIDTH_LONG,
                         text = self.button_text[r][c],
@@ -329,6 +330,8 @@ class Iteration3Helper:
                         font=self.FONT,
                         command = handler)
                 else:
+                    def handler(key = self.button_text[r][c]):
+                        self.button_handler(key)
                     button = tk.Button(frame,
                             width = self.KEYBOARD_BUTTON_WIDTH,
                             text = self.button_text[r][c],
@@ -340,6 +343,18 @@ class Iteration3Helper:
                 #where the key is the button text, and the
                 #value is the button object.
                 self.buttons[self.button_text[r][c]] = button
+
+    def enter_handler(self, text):
+        print("Hit enter button")
+
+    def back_handler(self, text):
+        print("Hit back button")
+
+    def button_handler(self,text):
+        """
+        Changes the color of the button that was pressed
+        """
+        print("Pushed the " + text + " button") 
 
     def list_pop(self):
         """ Populates the long_list and short_list from their respective text files """
