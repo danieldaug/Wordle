@@ -57,9 +57,9 @@ class Iteration3Helper:
         # Parameters for the keyboard frame
         self.KEYBOARD_FRAME_HEIGHT = 200
         self.KEYBOARD_BUTTON_HEIGHT = 2
-        self.KEYBOARD_BUTTON_WIDTH = 3  # width of the letter buttons.  Remember,
+        self.KEYBOARD_BUTTON_WIDTH = 5  # width of the letter buttons.  Remember,
                                         # width of buttons is measured in characters.
-        self.KEYBOARD_BUTTON_WIDTH_LONG = 5 # width of the enter and back buttons.
+        self.KEYBOARD_BUTTON_WIDTH_LONG = 7 # width of the enter and back buttons.
     
         # The following colors for the keyboard buttons
         # follow the same specifications as the colors defined above for the guess
@@ -302,8 +302,7 @@ class Iteration3Helper:
         self.keyboard_frame.columnconfigure(0, weight = 1)
         self.keyboard_frame.columnconfigure(len(self.button_text[0]) + 1, weight = 1)
         self.buttons = {}
-        self.button_width = 5
-        self.button_text_color = 'blue'
+        self.button_text_color = self.KEYBOARD_BUTTON_TEXT_BEGIN
         for r in range(len(self.button_text)):
             frame=tk.Frame(self.keyboard_frame,width=self.PARENT_GUESS_FRAME_WIDTH,height=self.KEYBOARD_FRAME_HEIGHT/3)
             frame.grid(row=r+1,column=1)
@@ -322,13 +321,25 @@ class Iteration3Helper:
                 # that specifies which button was pressed.
                 def handler(key = self.button_text[r][c]):
                     self.button_handler(key)
-                button = tk.Button(frame,
-                        width = self.KEYBOARD_BUTTON_WIDTH,#height=self.KEYBOARD_BUTTON_HEIGHT,
+                if self.button_text[r][c]=="ENTER" or self.button_text[r][c]=="BACK":
+                    button = tk.Button(frame,
+                        width = self.KEYBOARD_BUTTON_WIDTH_LONG,
                         text = self.button_text[r][c],
-                        fg=self.button_text_color, 
+                        fg=self.button_text_color,bg=self.KEYBOARD_BUTTON_BG_BEGIN,
                         font=self.FONT,
                         command = handler)
+                else:
+                    button = tk.Button(frame,
+                            width = self.KEYBOARD_BUTTON_WIDTH,
+                            text = self.button_text[r][c],
+                            fg=self.button_text_color, 
+                            font=self.FONT,
+                            command = handler)
                 button.grid(row = r + 1, column = c + 1)
+                #Put the button in a dictionary of buttons
+                #where the key is the button text, and the
+                #value is the button object.
+                self.buttons[self.button_text[r][c]] = button
 
     def list_pop(self):
         """ Populates the long_list and short_list from their respective text files """
