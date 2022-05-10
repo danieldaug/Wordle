@@ -360,7 +360,7 @@ class Iteration3Helper:
                 button = tk.Button(self.guess_frame,
                             height = 3,
                             width = 6,
-                            text = "a",
+                            text = "",
                             bg = self.GUESS_FRAME_BG_BEGIN, 
                             font=self.FONT
                             )
