@@ -18,6 +18,8 @@ class Iteration3Helper:
         Initialize the window with frames and widgets.
         """
         self.hidden_word = ""
+        self.curr_guess_row=0
+        self.curr_guess_box=0
         self.WORD_SIZE = 5  # number of letters in the hidden word
         self.NUM_GUESSES = 6 # number of guesses that the user gets
         self.LONG_WORDLIST_FILENAME = "long_wordlist.txt"
@@ -353,19 +355,26 @@ class Iteration3Helper:
                 self.buttons[self.button_text[r][c]] = button
 
     def create_guess_widgets(self):
-        
+        self.guess_widget_list=[]
         for r in range(self.NUM_GUESSES):
+            templist=[]
             for c in range(self.WORD_SIZE):
                 
-                button = tk.Button(self.guess_frame,
-                            height = 3,
-                            width = 6,
-                            text = "",
+                button = tk.Frame(self.guess_frame,
+                            height = self.GUESS_FRAME_SIZE,
+                            width = self.GUESS_FRAME_SIZE,
                             bg = self.GUESS_FRAME_BG_BEGIN, 
-                            font=self.FONT
+                            borderwidth = 1, relief = 'solid'
                             )
                 button.grid(row = r + 1, column = c + 1, padx = self.GUESS_FRAME_PADDING, pady = self.GUESS_FRAME_PADDING)
+                button.grid_columnconfigure(0,weight=1)
+                button.grid_columnconfigure(2,weight=1)
                 
+                button.grid_propagate(False)
+                templist.append(button)
+            
+            self.guess_widget_list.append(templist)
+            
                 
 
     def enter_handler(self, text):
@@ -379,6 +388,14 @@ class Iteration3Helper:
         Changes the color of the button that was pressed
         """
         print("Pushed the " + text + " button") 
+        letter=tk.Label(self.guess_widget_list[self.curr_guess_row][self.curr_guess_box],
+        text=text,
+        fg=self.GUESS_FRAME_TEXT_BEGIN,
+        font=(self.FONT_FAMILY,self.FONT_SIZE_GUESS))
+        
+        letter.grid(row=1,column=1)
+        self.curr_guess_box+=1
+        
 
     def list_pop(self):
         """ Populates the long_list and short_list from their respective text files """
