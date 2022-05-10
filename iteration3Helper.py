@@ -297,8 +297,16 @@ class Iteration3Helper:
         self.keyboard_frame.rowconfigure(len(self.button_text) + 1, weight = 1)
         self.keyboard_frame.columnconfigure(0, weight = 1)
         self.keyboard_frame.columnconfigure(len(self.button_text[0]) + 1, weight = 1)
+        self.guess_frame.rowconfigure(0, weight = 1)
+        self.guess_frame.rowconfigure(self.NUM_GUESSES + 1, weight = 1)
+        self.guess_frame.columnconfigure(0, weight = 1)
+        self.guess_frame.columnconfigure(self.WORD_SIZE + 1, weight = 1)
         self.buttons = {}
         self.button_text_color = self.KEYBOARD_BUTTON_TEXT_BEGIN
+        self.create_keyboard_buttons()
+        self.create_guess_widgets()
+
+    def create_keyboard_buttons(self):
         for r in range(len(self.button_text)):
             frame=tk.Frame(self.keyboard_frame,width=self.PARENT_GUESS_FRAME_WIDTH,height=self.KEYBOARD_FRAME_HEIGHT/3)
             frame.grid(row=r+1,column=1)
@@ -343,6 +351,22 @@ class Iteration3Helper:
                 #where the key is the button text, and the
                 #value is the button object.
                 self.buttons[self.button_text[r][c]] = button
+
+    def create_guess_widgets(self):
+        
+        for r in range(self.NUM_GUESSES):
+            for c in range(self.WORD_SIZE):
+                
+                button = tk.Button(self.guess_frame,
+                            height = 3,
+                            width = 6,
+                            text = "a",
+                            bg = self.GUESS_FRAME_BG_BEGIN, 
+                            font=self.FONT
+                            )
+                button.grid(row = r + 1, column = c + 1, padx = self.GUESS_FRAME_PADDING, pady = self.GUESS_FRAME_PADDING)
+                
+                
 
     def enter_handler(self, text):
         print("Hit enter button")
