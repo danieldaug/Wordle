@@ -2,7 +2,7 @@
 File: iteration4Helper.py
 Author: COMP 120 instructor
 Date: April 25, 2021
-Description: Code that handles the button events.
+Description: Code that handles the word enter events.
 """
 import random
 import tkinter as tk
@@ -12,7 +12,7 @@ import time
 
 from enum import Enum
 
-class Iteration4Helper:
+class Iteration5Helper:
     def __init__(self):
         """
         Initialize the window with frames and widgets.
@@ -366,6 +366,9 @@ class Iteration4Helper:
             # Check if guess is correct
             if self.curr_guess_str.lower() == self.hidden_word:
                 self.message_display("Correct. Nice job. Game over")
+                for (guessframe,letter,lettertext) in self.guess_widget_list[self.curr_guess_row]:
+                    guessframe.configure(bg="green")
+                    letter.configure(bg="green",fg=self.GUESS_FRAME_TEXT_AFTER)
                     
             else:
                 # Increment row and reset string and current box
@@ -493,4 +496,4 @@ class Iteration4Helper:
         else:
             self.hidden_word_var.set("")
 if __name__ == "__main__":
-   Iteration4Helper()
+   Iteration5Helper()
