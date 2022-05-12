@@ -406,6 +406,7 @@ class Iteration3Helper:
                 self.show_word_parameter = self.show_word_checkbox_var.get()
                 self.hidden_word = self.specify_word_entry_var.get()
                 self.specify_word_checkbutton['state'] = 'disabled'
+                self.start_button['state'] = 'disabled'
                 self.specify_word_entry_var.set("")
         else:
             # Initialize parameter variables and disable checkboxes/entries
@@ -415,6 +416,7 @@ class Iteration3Helper:
             self.guesses_must_be_words_checkbutton['state'] = 'disabled'
             self.show_word_parameter = self.show_word_checkbox_var.get()
             self.specify_word_checkbutton['state'] = 'disabled'
+            self.start_button['state'] = 'disabled'
             # Takes random word from long_list
             self.hidden_word = self.long_list[random.randint(0, len(self.short_list))]
 
