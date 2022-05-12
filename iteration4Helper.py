@@ -391,7 +391,7 @@ class Iteration4Helper:
     def button_handler(self,text):
         """Handles the user input of the letter buttons being clicked"""
         print("Pushed the " + text + " button") 
-        if self.curr_guess_box<5:
+        if self.curr_guess_box<self.WORD_SIZE:
             self.guess_widget_list[self.curr_guess_row][self.curr_guess_box][2].set(text)
             self.curr_guess_box+=1
             self.curr_guess_str+=text
