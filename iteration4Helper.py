@@ -106,6 +106,7 @@ class Iteration3Helper:
         self.Iteration_1()
         self.Iteration_2()
         self.Iteration_3()
+        
         # Start event loop
         self.window.mainloop()
 
@@ -389,13 +390,24 @@ class Iteration3Helper:
 
     def enter_handler(self, text):
         print("Hit enter button")
-
+        if len(self.curr_guess_str)!=5:
+            self.message_display("Word not finished")
+        elif self.guesses_must_be_words_parameter==True and self.curr_guess_str.lower() not in self.long_list:
+            self.message_display(self.curr_guess_str+" is not in the word list")
+        else:
+            self.curr_guess_row+=1
+            self.curr_guess_box=0
+            self.curr_guess_str=""
     def back_handler(self, text):
         print("Hit back button")
-        if self.curr_guess_box>=0:
-            self.guess_widget_list[self.curr_guess_row][self.curr_guess_box][2].set("")
+        if self.curr_guess_box>0:
             self.curr_guess_box-=1
+            self.guess_widget_list[self.curr_guess_row][self.curr_guess_box][2].set("")
+            
             self.curr_guess_str=self.curr_guess_str[:-1]
+        elif self.curr_guess_box==0:
+            self.guess_widget_list[self.curr_guess_row][self.curr_guess_box][2].set("")
+            self.curr_guess_str=""
 
     def button_handler(self,text):
         """
