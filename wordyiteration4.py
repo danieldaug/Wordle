@@ -432,7 +432,10 @@ class Iteration4Helper:
         self.button_enabler()
         """ Checks to make sure the game can start when the button is clicked, also initializes
         all parameter variables and starts the game if valid """
-
+        self.hard_mode_parameter = self.hard_mode_checkbox_var.get()
+        self.guesses_must_be_words_parameter = self.guesses_must_be_words_checkbox_var.get()
+        self.show_word_parameter = self.show_word_checkbox_var.get()
+        self.hidden_word = self.specify_word_entry_var.get()
         #Checks to see if user wants to specify word
         if self.specify_word_checkbox_var.get() == True:
             # Makes sure word if right length
@@ -447,22 +450,22 @@ class Iteration4Helper:
                     return
             else:
                 # Initialize parameter variables and disable checkboxes/entries
-                self.hard_mode_parameter = self.hard_mode_checkbox_var.get()
+                
                 self.hard_mode_checkbutton['state'] = 'disabled'
-                self.guesses_must_be_words_parameter = self.guesses_must_be_words_checkbox_var.get()
+                
                 self.guesses_must_be_words_checkbutton['state'] = 'disabled'
-                self.show_word_parameter = self.show_word_checkbox_var.get()
-                self.hidden_word = self.specify_word_entry_var.get()
+                
+               
                 self.specify_word_checkbutton['state'] = 'disabled'
                 self.start_button['state'] = 'disabled'
                 self.specify_word_entry_var.set("")
         else:
             # Initialize parameter variables and disable checkboxes/entries
-            self.hard_mode_parameter = self.hard_mode_checkbox_var.get()
+            
             self.hard_mode_checkbutton['state'] = 'disabled'
-            self.guesses_must_be_words_parameter = self.guesses_must_be_words_checkbox_var.get()
+            
             self.guesses_must_be_words_checkbutton['state'] = 'disabled'
-            self.show_word_parameter = self.show_word_checkbox_var.get()
+            
             self.specify_word_checkbutton['state'] = 'disabled'
             self.start_button['state'] = 'disabled'
             # Takes random word from long_list
