@@ -351,6 +351,7 @@ class Iteration3Helper:
                             font=self.FONT,
                             command = handler)
                 button.grid(row = r + 1, column = c + 1)
+                button['state'] = 'disabled'
                 #Put the button in a dictionary of buttons
                 #where the key is the button text, and the
                 #value is the button object.
@@ -385,19 +386,26 @@ class Iteration3Helper:
                 templist.append((guessframe,letter,temptext))
             
             self.guess_widget_list.append(templist)
-            
-                
+              
 
     def enter_handler(self, text):
         print("Hit enter button")
         if len(self.curr_guess_str)!=5:
             self.message_display("Word not finished")
+            return
         elif self.guesses_must_be_words_parameter==True and self.curr_guess_str.lower() not in self.long_list:
             self.message_display(self.curr_guess_str+" is not in the word list")
         else:
-            self.curr_guess_row+=1
-            self.curr_guess_box=0
-            self.curr_guess_str=""
+            if self.curr_guess_str.lower() == self.hidden_word:
+                self.message_display("Correct. Nice job. Game over")
+            else:
+                self.curr_guess_row+=1
+                self.curr_guess_box=0
+                self.curr_guess_str=""
+        if self.curr_guess_row == self.NUM_GUESSES and self.curr_guess_str.lower() != self.hidden_word:
+            self.message_display("Guesses used up. Word was " + self.hidden_word + ". Game over")
+        
+
     def back_handler(self, text):
         print("Hit back button")
         if self.curr_guess_box>0:
@@ -449,6 +457,7 @@ class Iteration3Helper:
         self.message_var.set("")
     
     def start_button_handler(self):
+        self.button_enabler()
         """ Checks to make sure the game can start when the button is clicked, also initializes
         all parameter variables and starts the game if valid """
 
@@ -495,6 +504,10 @@ class Iteration3Helper:
         print("Show word = " + str(self.show_word_checkbox_var.get()))
         print("Specify word = " + str(self.specify_word_checkbox_var.get()))
         print("Hidden word = " + self.hidden_word)
+
+    def button_enabler(self):
+        for value in self.buttons.values():
+            value['state'] = 'normal'
 
     def quit(self):
         """ Quits the window """

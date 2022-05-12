@@ -107,69 +107,6 @@ class Iteration3Helper:
         self.Iteration_3()
         # Start event loop
         self.window.mainloop()
-
-    
-    def helper(self):
-        
-        self.window = tk.Tk()
-        self.window.title("Iteration2 Helper")
-        self.window.geometry("600x600") # make window big
-
-        # Create font.
-        self.FONT = font.Font(family=self.FONT_FAMILY)
-
-        # Create frame for the buttons.
-        self.button_frame = tk.Frame(self.window, 
-            borderwidth = 1, relief = 'solid',
-            height = 200, width = 300)
-        self.button_frame.grid(row = 1, column = 1)
-        self.button_frame.grid_propagate(False)
-
-        # Center the frame in the window
-        self.window.rowconfigure(0, weight = 1)
-        self.window.rowconfigure(2, weight = 1)
-        self.window.columnconfigure(0, weight = 1)
-        self.window.columnconfigure(2, weight = 1)
-
-        # Define text to go in the buttons
-        self.button_text = [["Q", "W", "E","R","T","Y","U","I","O","P"],
-                        ["A", "S", "D","F","G","H","J","K","L"],
-                        ["ENTER","Z", "X", "C","V","B","N","M","BACK"]]
-        self.buttons = {}
-        self.button_width = 5
-        self.button_text_color = 'blue'
-
-        # Create the buttons.
-        for r in range(len(self.button_text)):
-            for c in range(len(self.button_text[r])):
-
-                # Define a handler for this button.
-                # Note that functions can be dynamically 
-                # defined, as is happening here.  Each
-                # button gets its own hander.  
-                # But each handler calls the same method
-                # (button_handler), but with a parameter
-                # that specifies which button was pressed.
-                def handler(key = self.button_text[r][c]):
-                    self.button_handler(key)
-                button = tk.Button(self.button_frame,
-                        width = self.button_width,
-                        text = self.button_text[r][c],
-                        fg=self.button_text_color, 
-                        font=self.FONT,
-                        command = handler)
-                button.grid(row = r + 1, column = c + 1)
-
-                #Put the button in a dictionary of buttons
-                #where the key is the button text, and the
-                #value is the button object.
-                self.buttons[self.button_text[r][c]] = button
-
-        # Center the grid of buttons in the button frame
-        self.button_frame.rowconfigure(0, weight = 1)
-        self.button_frame.rowconfigure(len(self.button_text) + 1, weight = 1)
-        self.button_frame.columnconfigure(0, weight = 1)
-        self.button_frame.columnconfigure(len(self.button_text[0]) + 1, weight = 1)
     
 
     def Iteration_1(self):
@@ -289,7 +226,7 @@ class Iteration3Helper:
         self.quit_button.grid(row=1,column=2)
 
     def Iteration_3(self):
-        
+        """ Implements all steps of iteration 3 """
         self.FONT = font.Font(family=self.FONT_FAMILY)
         self.button_text = [["Q", "W", "E","R","T","Y","U","I","O","P"],
                         ["A", "S", "D","F","G","H","J","K","L"],
@@ -309,7 +246,9 @@ class Iteration3Helper:
         self.create_guess_widgets()
 
     def create_keyboard_buttons(self):
+        """Creates all the keyboard button widgets in the button frame"""
         for r in range(len(self.button_text)):
+            #Create frame for each row of buttons
             frame=tk.Frame(self.keyboard_frame,width=self.PARENT_GUESS_FRAME_WIDTH,height=self.KEYBOARD_FRAME_HEIGHT/3)
             frame.grid(row=r+1,column=1)
             frame.rowconfigure(0, weight = 1)
@@ -326,6 +265,7 @@ class Iteration3Helper:
                 # (button_handler), but with a parameter
                 # that specifies which button was pressed.
                 
+                # Special case for enter or back button
                 if self.button_text[r][c]=="ENTER" or self.button_text[r][c]=="BACK":
                     if self.button_text[r][c]=="ENTER":
                         def handler(key = self.button_text[r][c]):
@@ -355,11 +295,12 @@ class Iteration3Helper:
                 self.buttons[self.button_text[r][c]] = button
 
     def create_guess_widgets(self):
+        """Creates the labels and frames widgets inside the guess frame"""
         self.guess_widget_list=[]
         for r in range(self.NUM_GUESSES):
             templist=[]
             for c in range(self.WORD_SIZE):
-                
+                # Create current frame in row (r) and column (c)
                 button = tk.Frame(self.guess_frame,
                             height = self.GUESS_FRAME_SIZE,
                             width = self.GUESS_FRAME_SIZE,
@@ -367,36 +308,29 @@ class Iteration3Helper:
                             borderwidth = 1, relief = 'solid'
                             )
                 button.grid(row = r + 1, column = c + 1, padx = self.GUESS_FRAME_PADDING, pady = self.GUESS_FRAME_PADDING)
+                # Center frames
                 button.grid_columnconfigure(0,weight=1)
                 button.grid_columnconfigure(2,weight=1)
                 
                 button.grid_propagate(False)
                 templist.append(button)
-            
+            # Add button to list
             self.guess_widget_list.append(templist)
             
                 
 
     def enter_handler(self, text):
+        """Handles the user input of the enter button being clicked"""
         print("Hit enter button")
 
     def back_handler(self, text):
+        """Handles the user input of the back button being clicked"""
         print("Hit back button")
 
     def button_handler(self,text):
-        """
-        Changes the color of the button that was pressed
-        """
+        """Handles the user input of the letter buttons being clicked"""
         print("Pushed the " + text + " button") 
-        letter=tk.Label(self.guess_widget_list[self.curr_guess_row][self.curr_guess_box],
-        text=text,
-        fg=self.GUESS_FRAME_TEXT_BEGIN,
-        font=(self.FONT_FAMILY,self.FONT_SIZE_GUESS))
         
-        letter.grid(row=1,column=1)
-        self.curr_guess_box+=1
-        
-
     def list_pop(self):
         """ Populates the long_list and short_list from their respective text files """
 
