@@ -1,8 +1,8 @@
 """
-File: iteration3Helper.py
+File: iteration4Helper.py
 Author: COMP 120 instructor
 Date: April 25, 2021
-Description: Code that illustrates creating a grid of buttons.
+Description: Code that handles the button events.
 """
 import random
 import tkinter as tk
@@ -12,7 +12,7 @@ import time
 
 from enum import Enum
 
-class Iteration3Helper:
+class Iteration4Helper:
     def __init__(self):
         """
         Initialize the window with frames and widgets.
@@ -167,8 +167,19 @@ class Iteration3Helper:
 
         #Add words to short list and long list
         self.list_pop()
+        # Call methods to create widgets 
+        self.frame_configure()
+        self.hard_mode_check_button_maker()
+        self.guess_must_be_word_checkbox_maker()
+        self.show_word_check_button_maker()
+        self.specify_word_checkbox_maker()
+        self.text_entry_maker()
+        self.hidden_word_label_maker()
+        self.message_label_maker()
+        self.start_quit_button_maker()
 
-        # Create blanks rows so widgets will be centered in each frame
+    def frame_configure(self):
+        """ Create blanks rows so widgets will be centered in each frame """
         self.parameter_frame.rowconfigure(0,weight=2)
         self.parameter_frame.rowconfigure(5,weight=2)
         
@@ -182,50 +193,61 @@ class Iteration3Helper:
         self.button_frame.rowconfigure(0,weight=2)
         self.button_frame.rowconfigure(2,weight=2)
 
-        # Create hard mode check button
+
+
+    def hard_mode_check_button_maker(self):
+        """ Create hard mode check button """
         self.hard_mode_checkbox_var = tk.BooleanVar()
         self.hard_mode_checkbox_var.set(False)
         self.hard_mode_checkbutton = tk.Checkbutton(self.parameter_frame, text = "Hard Mode", var = self.hard_mode_checkbox_var)
         self.hard_mode_checkbutton.grid(row = 1, column = 0, padx = self.PADDING, sticky = "W")
 
-        # Create guesses must be words check button
+    def guess_must_be_word_checkbox_maker(self):
+        """ Create guesses must be words check button """
         self.guesses_must_be_words_checkbox_var = tk.BooleanVar()
         self.guesses_must_be_words_checkbox_var.set(True)
         self.guesses_must_be_words_checkbutton = tk.Checkbutton(self.parameter_frame, text = "Guesses must be words", var = self.guesses_must_be_words_checkbox_var)
         self.guesses_must_be_words_checkbutton.grid(row = 2, column = 0, padx = self.PADDING, sticky = "W")
-        
-        # Create show word check button
+    
+    def show_word_check_button_maker(self):
+        """ Create show word check button """
         self.show_word_checkbox_var = tk.BooleanVar()
         self.show_word_checkbox_var.set(False)
         self.show_word_checkbutton = tk.Checkbutton(self.parameter_frame, text = "Show word", var = self.show_word_checkbox_var, command = self.show_word_check)
         self.show_word_checkbutton.grid(row = 3, column = 0, padx = self.PADDING, sticky = "W")
-
-        # Create specify word check button
+    
+    def specify_word_checkbox_maker(self):
+        """ Create specify word check button """
         self.specify_word_checkbox_var = tk.BooleanVar()
         self.specify_word_checkbox_var.set(False)
         self.specify_word_checkbutton = tk.Checkbutton(self.parameter_frame, text = "Specify word", var = self.specify_word_checkbox_var)
         self.specify_word_checkbutton.grid(row = 4, column = 0, padx = self.PADDING, sticky = "W")
 
-        # Create text entry for specify word 
+    def text_entry_maker(self):
+        """ Create text entry for specify word """
         self.specify_word_entry_var = tk.StringVar()
         self.specify_word_entry = tk.Entry(self.parameter_frame, width = self.ENTRY_SIZE, textvariable = self.specify_word_entry_var)
         self.specify_word_entry.grid(row = 4, column = 1)
 
-        # Create label for hidden word
+    def hidden_word_label_maker(self):
+        """ Create label for hidden word """
         self.hidden_word_var=tk.StringVar()
         self.show_word_text=tk.Label(self.parameter_frame,textvariable=self.hidden_word_var)
         self.show_word_text.grid(row=3,column=1)
         
-        # Create label to display messages
+    def message_label_maker(self):
+        """ Create label to display messages """
         self.message_var=tk.StringVar()
         self.message=tk.Label(self.message_frame,textvariable=self.message_var)
         self.message.grid(row=1,column=1)
 
-        # Create start and quit buttons
+    def start_quit_button_maker(self):
+        """ Create start and quit buttons """
         self.start_button=tk.Button(self.button_frame,text="Start Game", command = self.start_button_handler)
         self.start_button.grid(row=1,column=1)
         self.quit_button=tk.Button(self.button_frame,text="Quit", command = self.quit)
         self.quit_button.grid(row=1,column=2)
+
 
     def Iteration_3(self):
         """ Implements all steps of iteration 3 """
@@ -468,4 +490,4 @@ class Iteration3Helper:
         else:
             self.hidden_word_var.set("")
 if __name__ == "__main__":
-   Iteration3Helper()
+   Iteration4Helper()
