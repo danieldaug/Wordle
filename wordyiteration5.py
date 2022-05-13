@@ -354,7 +354,7 @@ class Iteration5Helper:
     def enter_handler(self, text):
         """Handles the user input of the enter button being clicked"""
         print("Hit enter button")
-        self.create_word_dict()
+        self.create_word_and_guess_dict()
         # Make sure guess is correct length
         if len(self.curr_guess_str)!=self.WORD_SIZE:
             self.message_display("Word not finished")
@@ -363,7 +363,7 @@ class Iteration5Helper:
         elif self.guesses_must_be_words_parameter==True and self.curr_guess_str.lower() not in self.long_list:
             self.message_display(self.curr_guess_str+" is not in the word list")
         else:
-            self.enter_events()
+            self.enter_event()
             # Check if guess is correct
             if self.curr_guess_str.lower() == self.hidden_word:
                 self.message_display("Correct. Nice job. Game over")
@@ -379,23 +379,48 @@ class Iteration5Helper:
         if self.curr_guess_row == self.NUM_GUESSES and self.curr_guess_str.lower() != self.hidden_word:
             self.message_display("Guesses used up. Word was " + self.hidden_word + ". Game over")
     
-    def create_word_dict(self):
+    def create_word_and_guess_dict(self):
         self.word_dict = {}
-        for letter in self.curr_guess_str:
+        self.guess_dict = {}
+        for letter in self.hidden_word.lower():
             self.word_dict[letter] = self.word_dict.get(letter,0) + 1
-
-    def color_guess_boxes(self):
-        pass
     
-    def enter_events(self):
+    def enter_event(self):
         for i in range(self.WORD_SIZE):
-            curr_letter = self.curr_guess_str[i]
+            curr_letter = self.curr_guess_str[i].lower()
             """ finish writing code here """
-            if curr_letter in self.hidden_word:
-                print("a")
+            
+            if curr_letter == self.hidden_word[i]:
+                self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_CORRECT_RIGHT_LOC, fg = self.GUESS_FRAME_TEXT_AFTER)
+                self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_CORRECT_RIGHT_LOC)
+                self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_RIGHT_LOC)
+                self.guess_dict[curr_letter] = self.guess_dict.get(curr_letter,0) + 1
             else:
                 self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_WRONG, fg = self.GUESS_FRAME_TEXT_AFTER)
                 self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_WRONG)
+                self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_WRONG)
+                
+        for i in range(self.WORD_SIZE):
+            
+            curr_letter = self.curr_guess_str[i].lower()
+            if curr_letter in self.guess_dict.keys():
+                
+                if curr_letter == self.hidden_word[i]:
+                    pass
+                elif curr_letter in self.hidden_word and self.word_dict[curr_letter] > self.guess_dict[curr_letter]:
+                    self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC, fg = self.GUESS_FRAME_TEXT_AFTER)
+                    self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC)
+                    self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_WRONG_LOC)
+                    self.guess_dict[curr_letter] = self.guess_dict.get(curr_letter,0) + 1
+
+            elif curr_letter not in self.guess_dict.keys() and curr_letter in self.hidden_word:
+                self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC, fg = self.GUESS_FRAME_TEXT_AFTER)
+                self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC)
+                self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_WRONG_LOC)
+                self.guess_dict[curr_letter] = self.guess_dict.get(curr_letter,0) + 1
+
+        
+        
 
     def back_handler(self, text):
         """Handles the user input of the back button being clicked"""
