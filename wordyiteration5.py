@@ -386,6 +386,7 @@ class Iteration5Helper:
             self.word_dict[letter] = self.word_dict.get(letter,0) + 1
     
     def enter_event(self):
+        time.sleep(self.PROCESS_GUESS_WAITTIME)
         for i in range(self.WORD_SIZE):
             curr_letter = self.curr_guess_str[i].lower()
             """ finish writing code here """
