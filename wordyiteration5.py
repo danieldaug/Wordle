@@ -354,7 +354,7 @@ class Iteration5Helper:
     def enter_handler(self, text):
         """Handles the user input of the enter button being clicked"""
         print("Hit enter button")
-
+        self.create_word_dict()
         # Make sure guess is correct length
         if len(self.curr_guess_str)!=self.WORD_SIZE:
             self.message_display("Word not finished")
@@ -363,13 +363,13 @@ class Iteration5Helper:
         elif self.guesses_must_be_words_parameter==True and self.curr_guess_str.lower() not in self.long_list:
             self.message_display(self.curr_guess_str+" is not in the word list")
         else:
+            self.enter_events()
             # Check if guess is correct
             if self.curr_guess_str.lower() == self.hidden_word:
                 self.message_display("Correct. Nice job. Game over")
                 for (guessframe,letter,lettertext) in self.guess_widget_list[self.curr_guess_row]:
                     guessframe.configure(bg="green")
                     letter.configure(bg="green",fg=self.GUESS_FRAME_TEXT_AFTER)
-                    
             else:
                 # Increment row and reset string and current box
                 self.curr_guess_row+=1
@@ -378,9 +378,24 @@ class Iteration5Helper:
         # Check if last guess was used
         if self.curr_guess_row == self.NUM_GUESSES and self.curr_guess_str.lower() != self.hidden_word:
             self.message_display("Guesses used up. Word was " + self.hidden_word + ". Game over")
-        
+    
+    def create_word_dict(self):
+        self.word_dict = {}
+        for letter in self.curr_guess_str:
+            self.word_dict[letter] = self.word_dict.get(letter,0) + 1
+
     def color_guess_boxes(self):
         pass
+    
+    def enter_events(self):
+        for i in range(len(self.WORD_SIZE)):
+            curr_letter = self.curr_guess_str[i]
+            if curr_letter in self.hidden_word:
+                print("a")
+            else:
+                self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_WRONG, fg = self.GUESS_FRAME_TEXT_AFTER)
+                
+
 
     def back_handler(self, text):
         """Handles the user input of the back button being clicked"""
