@@ -380,40 +380,46 @@ class Iteration5Helper:
             self.message_display("Guesses used up. Word was " + self.hidden_word + ". Game over")
     
     def create_word_and_guess_dict(self):
+        """ Creates/Initializes the word and guess dictionaries to be used by the enter event method """
         self.word_dict = {}
         self.guess_dict = {}
         for letter in self.hidden_word.lower():
             self.word_dict[letter] = self.word_dict.get(letter,0) + 1
     
     def enter_event(self):
+        """ Processes a user guess and correctly colors the letters in the keyboard and guess frames """
         time.sleep(self.PROCESS_GUESS_WAITTIME)
+        # First loop to color everything to default grey and anything that is in correct place to green
+        # Also populates the guess dictionary with correct guesses 
         for i in range(self.WORD_SIZE):
             curr_letter = self.curr_guess_str[i].lower()
-            """ finish writing code here """
-            
             if curr_letter == self.hidden_word[i]:
+                # Color guess and keyboard widgets
                 self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_CORRECT_RIGHT_LOC, fg = self.GUESS_FRAME_TEXT_AFTER)
                 self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_CORRECT_RIGHT_LOC)
                 self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_RIGHT_LOC)
                 self.guess_dict[curr_letter] = self.guess_dict.get(curr_letter,0) + 1
             else:
+                # Color everything else default (grey) if it's not in the correct place
                 self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_WRONG, fg = self.GUESS_FRAME_TEXT_AFTER)
                 self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_WRONG)
                 self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_WRONG)
                 
+        # Second loop to color everything orange if it should be orange based on criteria
         for i in range(self.WORD_SIZE):
-            
             curr_letter = self.curr_guess_str[i].lower()
             if curr_letter in self.guess_dict.keys():
-                
+                # Don't do anything because it is already colored green from above
                 if curr_letter == self.hidden_word[i]:
                     pass
+                # Color incorrect location but correct letter orange from left to right
+                # Only color it orange if the number of that letter colored orange or green in the word is less than the total in the hidden word
                 elif curr_letter in self.hidden_word and self.word_dict[curr_letter] > self.guess_dict[curr_letter]:
                     self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC, fg = self.GUESS_FRAME_TEXT_AFTER)
                     self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC)
                     self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_WRONG_LOC)
                     self.guess_dict[curr_letter] = self.guess_dict.get(curr_letter,0) + 1
-
+            # color orange if it's not in the dictionary but it is in the word
             elif curr_letter not in self.guess_dict.keys() and curr_letter in self.hidden_word:
                 self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC, fg = self.GUESS_FRAME_TEXT_AFTER)
                 self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC)
