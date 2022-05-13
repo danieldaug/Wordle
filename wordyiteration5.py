@@ -388,14 +388,14 @@ class Iteration5Helper:
         pass
     
     def enter_events(self):
-        for i in range(len(self.WORD_SIZE)):
+        for i in range(self.WORD_SIZE):
             curr_letter = self.curr_guess_str[i]
+            """ finish writing code here """
             if curr_letter in self.hidden_word:
                 print("a")
             else:
                 self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_WRONG, fg = self.GUESS_FRAME_TEXT_AFTER)
-                
-
+                self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_WRONG)
 
     def back_handler(self, text):
         """Handles the user input of the back button being clicked"""
