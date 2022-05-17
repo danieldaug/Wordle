@@ -14,6 +14,7 @@ import time
 from enum import Enum
 class HardModeError(Exception):
     pass
+
 class Iteration6Helper:
     def __init__(self):
         """
@@ -366,10 +367,12 @@ class Iteration6Helper:
         elif self.guesses_must_be_words_parameter==True and self.curr_guess_str.lower() not in self.long_list:
             self.message_display(self.curr_guess_str+" is not in the word list")
         else:
+            # Raise HardModeError if hardmode is enabled and guess is inconsistent
             try:
                 self.hard_mode_handler()
             except HardModeError:
-                self.message_display("Invalid guess; Hardmode is enabled")
+                self.message_display(self.curr_guess_str.lower() + " is not consistent with previous guesses")
+                return
             self.enter_event()
             # Check if guess is correct
             if self.curr_guess_str.lower() == self.hidden_word:
@@ -387,13 +390,21 @@ class Iteration6Helper:
             self.message_display("Guesses used up. Word was " + self.hidden_word + ". Game over")
     
     def hard_mode_handler(self):
+        """ Handles the hard mode parameter """
         if self.hard_mode_parameter == False:
             return
         else:
             for i in range(self.WORD_SIZE):
                 curr_letter = self.curr_guess_str[i].lower()
-                if curr_letter not in self.hidden_word:
-                    self.buttons[curr_letter.upper()]['state'] = 'disabled'
+                if self.previous_guess == "":
+                    pass
+                elif curr_letter in self.previous_guess.lower() and curr_letter not in self.hidden_word.lower():
+                    raise HardModeError
+                elif self.previous_guess[i].lower() == self.hidden_word[i].lower() and curr_letter != self.previous_guess[i].lower():
+                    raise HardModeError
+                elif self.previous_guess[i].lower() in self.hidden_word and self.previous_guess[i] not in self.curr_guess_str:
+                    raise HardModeError
+            
         self.previous_guess = self.curr_guess_str
 
     def create_word_and_guess_dict(self):
