@@ -443,7 +443,10 @@ class Iteration6Helper:
                 # Color everything else default (grey) if it's not in the correct place
                 self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_WRONG, fg = self.GUESS_FRAME_TEXT_AFTER)
                 self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_WRONG)
-                self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_WRONG)
+                if self.buttons[curr_letter.upper()]["fg"] == self.KEYBOARD_BUTTON_BG_CORRECT_RIGHT_LOC:
+                    pass
+                else:
+                    self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_WRONG)
                 
         # Second loop to color everything orange if it should be orange based on criteria
         for i in range(self.WORD_SIZE):
@@ -457,13 +460,19 @@ class Iteration6Helper:
                 elif curr_letter in self.hidden_word and self.word_dict[curr_letter] > self.guess_dict[curr_letter]:
                     self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC, fg = self.GUESS_FRAME_TEXT_AFTER)
                     self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC)
-                    self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_WRONG_LOC)
+                    if self.buttons[curr_letter.upper()]["fg"] == self.KEYBOARD_BUTTON_BG_CORRECT_RIGHT_LOC:
+                        pass
+                    else:
+                        self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_WRONG_LOC)
                     self.guess_dict[curr_letter] = self.guess_dict.get(curr_letter,0) + 1
             # color orange if it's not in the dictionary but it is in the word
             elif curr_letter not in self.guess_dict.keys() and curr_letter in self.hidden_word:
                 self.guess_widget_list[self.curr_guess_row][i][1].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC, fg = self.GUESS_FRAME_TEXT_AFTER)
                 self.guess_widget_list[self.curr_guess_row][i][0].configure(bg = self.GUESS_FRAME_BG_CORRECT_WRONG_LOC)
-                self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_WRONG_LOC)
+                if self.buttons[curr_letter.upper()]["fg"] == self.KEYBOARD_BUTTON_BG_CORRECT_RIGHT_LOC:
+                        pass
+                else:
+                    self.buttons[curr_letter.upper()].configure(fg = self.KEYBOARD_BUTTON_BG_CORRECT_WRONG_LOC)
                 self.guess_dict[curr_letter] = self.guess_dict.get(curr_letter,0) + 1
 
 
