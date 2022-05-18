@@ -110,6 +110,7 @@ class Iteration6Helper:
         self.Iteration_1()
         self.Iteration_2()
         self.Iteration_3()
+        self.initialize_yellow_dict()
         
         # Start event loop
         self.window.mainloop()
@@ -353,7 +354,13 @@ class Iteration6Helper:
                 templist.append((guessframe,letter,temptext))
             # Make list containing the frame,label, and stringvar
             self.guess_widget_list.append(templist)
-              
+    
+    def initialize_yellow_dict(self):
+        """Initializes dictionary of yellow character guesses to be used for hardmode"""
+        self.yellow_dict = {}
+        letter_list = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+        for char in letter_list:
+            self.yellow_dict[char] = []
 
     def enter_handler(self, text):
         """Handles the user input of the enter button being clicked"""
@@ -385,15 +392,21 @@ class Iteration6Helper:
                 self.curr_guess_row+=1
                 self.curr_guess_box=0
                 self.curr_guess_str=""
-        # Check if last guess was used
-        if self.curr_guess_row == self.NUM_GUESSES and self.curr_guess_str.lower() != self.hidden_word:
-            self.message_display("Guesses used up. Word was " + self.hidden_word + ". Game over")
+            # Check if last guess was used
+            if self.curr_guess_row == self.NUM_GUESSES and self.curr_guess_str.lower() != self.hidden_word:
+                self.message_display("Guesses used up. Word was " + self.hidden_word + ". Game over")
+            # populates the yellow dictionary for hardmode
     
     def hard_mode_handler(self):
         """ Handles the hard mode parameter """
         if self.hard_mode_parameter == False:
             return
         else:
+            for i in range(self.WORD_SIZE):
+                if self.curr_guess_str[i].lower() in self.previous_guess.lower() and i in self.yellow_dict[self.curr_guess_str[i].lower()]:
+                        raise HardModeError
+                if self.curr_guess_str[i].lower() in self.hidden_word.lower() and self.curr_guess_str[i].lower() != self.hidden_word[i].lower():
+                    self.yellow_dict[self.curr_guess_str[i].lower()].append(i)
             for i in range(self.WORD_SIZE):
                 curr_letter = self.curr_guess_str[i].lower()
                 if self.previous_guess == "":
@@ -404,7 +417,6 @@ class Iteration6Helper:
                     raise HardModeError
                 elif self.previous_guess[i].lower() in self.hidden_word and self.previous_guess[i] not in self.curr_guess_str:
                     raise HardModeError
-            
         self.previous_guess = self.curr_guess_str
 
     def create_word_and_guess_dict(self):
